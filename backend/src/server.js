@@ -16,4 +16,6 @@ if(ENV.NODE_ENV === "production"){
         res.sendFile(path.join(__dirname, "../admin" , "dist" , "index.html"));
     })
 };
-app.listen(ENV.PORT, () => console.log("Server is up and running"));
+app.listen(ENV.PORT, () => {
+    console.log(`Server is up and running on port ${ENV.PORT}`);
+});
