@@ -10,10 +10,10 @@ app.get("/api/health", (req,res) => {res.status(200).json({message:"Success"});}
 // Membuat app siap untuk deployment
 
 if(ENV.NODE_ENV === "production"){
-    app.use(express.static(path.__dirname,"../admin/dist"))
+    app.use(express.static(path.join(__dirname,"../admin/dist")))
 
     app.get("/{*any}",(req,res) => {
-        res.senFile(path.join(__dirname, "../admin" , "dist" , "index.html"));
+        res.sendFile(path.join(__dirname, "../admin" , "dist" , "index.html"));
     })
 };
 app.listen(ENV.PORT, () => console.log("Server is up and running"));
