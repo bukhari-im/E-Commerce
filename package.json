@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node":">=20.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "build": "npm install --prefix backend && npm install --prefix admin && npm run build --prefix admin",
@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/bukhari-im/E-Commerce#readme",
   "dependencies": {
-    "express": "^5.2.1"
-  },
-  "devDependencies": {}
+    "dotenv": "^18.0.0",
+    "express": "^5.2.1",
+    "mongoose": "^9.10.2"
+  }
 }
