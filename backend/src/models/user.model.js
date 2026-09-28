@@ -1,4 +1,3 @@
-import { Timestamp } from "mongodb";
 import mongoose from "mongoose";
 const addressSchema = new mongoose.Schema({
     label: {
@@ -66,4 +65,4 @@ const userSchema = new mongoose.Schema({
 {timestamps:true}
 );
 
-export const user = mongoose.model("User",userSchema);
+export const User = mongoose.model("User",userSchema);
