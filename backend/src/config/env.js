@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({quiet: true});
 
 export const ENV = {
     DB_URL: process.env.DB_URL,
@@ -11,7 +11,8 @@ export const ENV = {
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
-    INNGEST_SINGING_KEY: process.env.INNGEST_SINGING_KEY,
+    INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     
 
 };

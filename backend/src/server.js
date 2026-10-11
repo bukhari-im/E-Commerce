@@ -1,36 +1,47 @@
 import express from "express";
 import path from "path";
-import { clerkMiddleware } from '@clerk/express';
+import { clerkMiddleware } from "@clerk/express";
 import { serve } from "inngest/express";
-import { functions, inngest} from "./config/inggest.js";
+
+import { functions, inngest } from "./config/inngest.js";
 import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
+import adminRoutes from "./routes/admin.route.js";
 
 const app = express();
-
 const __dirname = path.resolve();
 
 app.use(express.json());
 
-app.use(clerkMiddleware());//menambahkan object authentication di bawah the requet => req.auth
+app.use(clerkMiddleware());
 
-app.use("/api/inngest", serve({ client: inngest, functions}));
+app.use("/api/inngest", serve({ client: inngest, functions }));
 
-app.get("/api/health", (req,res) => {res.status(200).json({message:"Success"});});
+app.use("/api/admin", adminRoutes);
 
-// Membuat app siap untuk deployment
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ message: "Success" });
+});
 
-if(ENV.NODE_ENV === "production"){
-    app.use(express.static(path.join(__dirname,"../admin/dist")));
+if (ENV.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../admin/dist")));
 
-    app.get("/{*any}",(req,res) => {
-        res.sendFile(path.join(__dirname, "../admin" , "dist" , "index.html"));
-    });
+  app.get("/{*any}", (req, res) => {
+    res.sendFile(path.join(__dirname, "../admin/dist/index.html"));
+  });
 }
-const starServer = async () => {
+
+const startServer = async () => {
+  try {
     await connectDB();
+
     app.listen(ENV.PORT, () => {
-        console.log("Server is up and running");
+      console.log(`Server is up and running`);
     });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
 };
-starServer();
+
+startServer();
