@@ -21,7 +21,6 @@ app.use("/api/inngest", serve({ client: inngest, functions}));
 app.get("/api/health", (req,res) => {res.status(200).json({message:"Success"});});
 
 // Membuat app siap untuk deployment
-app.use("/api/admin", adminRoutes);
 app.use("/api/users", userRoutes);
 
 app.get("/api/health", (req, res) => {
