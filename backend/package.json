@@ -18,6 +18,7 @@
     "express": "^5.2.1",
     "inngest": "^4.21.0",
     "mongodb": "^7.6.0",
-    "mongoose": "^9.10.2"
+    "mongoose": "^9.10.2",
+    "multer": "^2.4.0"
   }
 }

@@ -7,6 +7,10 @@ try {
 
     const user = req.user;
 
+    if (!fullName || !streetAddress || !city || !state || !zipCode) {
+        return res.status(400).json({ error:"Missing required address field"});
+    }
+
     // if this is set as default, unset all other default
 
     if(isDefault) {
@@ -137,7 +141,7 @@ export async function removeFromWishlist(req,res) {
           // check if product is already in the wishlist
 
     if (!user.wishList.includes(productId)) {
-        return res.status(400).json({error:"Product is not even in wishlist"});
+        return res.status(400).json({error:"Product not found in wishlist"});
     }
 
         user.wishList.pull(productId);
@@ -152,7 +156,9 @@ export async function removeFromWishlist(req,res) {
 };
 export async function getWishlist(req,res) {
     try {
-        const user = req.user;
+    // we're using populate, because wishList is just an array of product.Id
+        const user = await User.findById(req.user_id).populate("wishList")
+
         res.status(200).json({wishList: user.wishList});
 
     } catch (error) {
