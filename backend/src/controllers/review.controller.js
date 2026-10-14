@@ -1,5 +1,5 @@
 import { Order } from "../models/Order.Model.js";
-import { Review } from "../models/Review.Model";
+import { Review } from "../models/Review.Model.js";
 
 export async function createReview(req,res) {
     try {
@@ -52,12 +52,18 @@ export async function createReview(req,res) {
       });
 
       // update the product rating 
-
-      const product = await Product.findById(productId);
-      const reviews = await Review.find({productId});
+      const reviews = await Review.find({ productId });
       const totalRating = reviews.reduce((sum, rev) => sum + rev.rating, 0);
-      product.averageRating = totalRating/ reviews.length;
-      product.totalReviews = reviews.length;
+      const updatedProduct = await Product.findByIdAndDelete(productId,
+        {
+            averageRating: totalRating / reveiws.length,
+            totalReviews: reveiws.length,
+        },{ new: true, runValidators: true }
+      );
+      if (!updatedProduct) {
+        await Review.findByIdAndDelete(review._id);
+        return res.status(404).json({ error: " Product not found "});
+      }
 
       await product.save();
 
