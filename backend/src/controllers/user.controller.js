@@ -157,7 +157,6 @@ export async function removeFromWishlist(req,res) {
 export async function getWishlist(req,res) {
     try {
     // we're using populate, because wishList is just an array of product.Id
-    
         const user = await User.findById(req.user_id).populate("wishList")
 
         res.status(200).json({wishList: user.wishList});

@@ -1,3 +1,4 @@
+
 import express from "express";
 import path from "path";
 import { clerkMiddleware } from "@clerk/express";
@@ -13,7 +14,6 @@ import orderRoutes from "./routes/order.route.js";
 import reviewRoutes from "./routes/review.route.js";
 import productRoutes from "./routes/product.route.js";
 import cartRoutes from "./routes/cart.routes.js";
-
 
 const app = express();
 const __dirname = path.resolve();
@@ -31,10 +31,12 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
 
+// Health check
 app.get("/api/health", (req, res) => {
   res.status(200).json({ message: "Success" });
 });
 
+// Serve admin frontend in production
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../admin/dist")));
 
@@ -48,12 +50,11 @@ const startServer = async () => {
     await connectDB();
 
     app.listen(ENV.PORT, () => {
-      console.log(`Server is up and running`);
+      console.log("Server is up and running");
     });
   } catch (error) {
     console.error("Failed to start server:", error);
     process.exit(1);
   }
 };
-
 startServer();
