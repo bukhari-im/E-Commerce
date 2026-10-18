@@ -118,6 +118,9 @@ export async function getAllOrders(_,res) {
         .populate("user", "name email")
         .populate("orderItems.product")
         .sort({createdAt:-1});
+
+        // send the last 5 recent orders from the backend
+
         res.status(200).json({ orders });
 
     } catch (error) {
