@@ -29,7 +29,7 @@ function DashboardPage() {
   // Ambil maksimal 5 pesanan terbaru.
   // Pastikan backend mengurutkan pesanan dari yang terbaru.
 
-  const recentOrders = ordersData?.slice(0, 5) ?? [];
+  const recentOrders = ordersData?.orders?.slice(0, 5) ?? [];
 
   // Format angka menjadi Rupiah.
 
@@ -43,7 +43,7 @@ function DashboardPage() {
       name: "Total Revenue",
       value: statsLoading
         ? "..."
-        : formatRupiah(statsData?.totalRevenue || 0),
+        : formatRupiah(statsData?.totalRevenue ?? 0),
       icon: <Banknote className="size-8" />,
     },
     {
