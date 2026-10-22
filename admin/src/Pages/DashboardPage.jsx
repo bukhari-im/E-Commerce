@@ -29,7 +29,7 @@ function DashboardPage() {
   // Ambil maksimal 5 pesanan terbaru.
   // Pastikan backend mengurutkan pesanan dari yang terbaru.
 
-  const recentOrders = ordersData?.slice(0, 5) ?? [];
+  const recentOrders = (ordersData?.orders ?? []).slice(0, 5);
 
   // Format angka menjadi Rupiah.
 
@@ -116,43 +116,60 @@ function DashboardPage() {
                       <th>Date</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {recentOrders.map(order => (
-                      <tr key={order._id}>
-                        <td>
-                          <span className="font-medium ">#{order._id.slice(-8).toUpperCase()}</span>
-                        </td>
+                  
+<tbody>
+  {recentOrders.map((order) => {
+    const items = order.orderItem ?? [];
 
-                        <td>
-                          <div>
-                           <div className="font-medium">{order.shippingAddress?.fullName ?? "Unknown"}</div>
-                            <div className="text-sm opacity-60">{order.orderItems?.length?? 0} item(s)</div>
-                          </div>
-                        </td>
+    return (
+      <tr key={order._id}>
+        <td>
+          <span className="font-medium">
+            #{order._id.slice(-8).toUpperCase()}
+          </span>
+        </td>
 
-                          <td>
-                            <div className="text-sm">
-                              {order.orderItems[0]?.name}
-                              {order.orderItems.length > 1 && `+${order.orderItems.length -1} more`}
-                            </div>
-                          </td> 
+        <td>
+          <div className="font-medium">
+            {order.shippingAddress?.fullName ?? "Unknown"}
+          </div>
+          <div className="text-sm opacity-60">
+            {items.length} item(s)
+          </div>
+        </td>
 
-                          <td>
-                            <span className="font-semibold">Rp{formatRupiah(order.totalPrice)}</span>
-                          </td>    
+        <td>
+          <div className="text-sm">
+            {items[0]?.name ?? "No items"}
+            {items.length > 1 &&
+              ` +${items.length - 1} more`}
+          </div>
+        </td>
 
-                          <td>
-                            <div className={`badge ${getOrderStatusBadge(order.status)}`}>
-                                            {capitalizeText(order.status)}
-                            </div>
-                          </td>    
+        <td>
+          <span className="font-semibold">
+            Rp{formatRupiah(order.totalPrice)}
+          </span>
+        </td>
 
-                          <td>
-                            <span className="text-sm opacity-60">{formatDate(order.createdAt)}</span>
-                          </td>
-                        </tr>
-                    ))}
-                  </tbody>
+        <td>
+          <div
+            className={`badge ${getOrderStatusBadge(order.status)}`}
+          >
+            {capitalizeText(order.status)}
+          </div>
+        </td>
+
+        <td>
+          <span className="text-sm opacity-60">
+            {formatDate(order.createdAt)}
+          </span>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
+
                 </table>
               </div>
 

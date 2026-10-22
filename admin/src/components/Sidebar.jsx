@@ -16,15 +16,15 @@ function Sidebar() {
         className="drawer-overlay"
       />
 
-      <div className="flex min-h-full w-64 flex-col bg-base-200
-        is-drawer-close:w-14 is-drawer-open:w-64">
-
+      <div
+        className="flex min-h-full w-64 flex-col bg-base-200
+        is-drawer-close:w-14 is-drawer-open:w-64"
+      >
         {/* Logo and Admin */}
-        
         <div className="p-4">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary">
-              <ShoppingBagIcon className="size-6 text-primary-content" />
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-orange-500">
+              <ShoppingBagIcon className="size-6 text-white" />
             </div>
 
             <span className="text-xl font-bold is-drawer-close:hidden">
@@ -33,9 +33,8 @@ function Sidebar() {
           </div>
         </div>
 
-        {/* Memunculkan Navigation Menu di Navbar.jsx dengan mengakses mengggunakan Link */}
-
-        <ul className="menu w-full flex-1 gap-2">
+        {/* Navigation Menu */}
+        <ul className="menu w-full flex-1 gap-2 px-3">
           {NAVIGATION.map((item) => {
             const isActive = location.pathname === item.path;
 
@@ -44,11 +43,14 @@ function Sidebar() {
                 <Link
                   to={item.path}
                   data-tip={item.name}
-                  className={`is-drawer-close:tooltip is-drawer-close:tooltip-right ${
-                    isActive
-                      ? "bg-primary text-primary-content"
-                      : ""
-                  }`}
+                  className={`rounded-xl transition-all duration-300
+                    is-drawer-close:tooltip
+                    is-drawer-close:tooltip-right
+                    ${
+                      isActive
+                        ? "bg-orange-500 font-semibold text-white shadow-md shadow-orange-400/20 hover:bg-orange-400 hover:text-white"
+                        : "text-base-content hover:bg-orange-300/10 hover:text-orange-300"
+                    }`}
                 >
                   {item.icon}
 
@@ -62,7 +64,6 @@ function Sidebar() {
         </ul>
 
         {/* User Profile */}
-
         <div className="mt-auto border-t border-base-300 p-4">
           <div className="flex items-center gap-3">
             <div className="avatar-placeholder shrink-0">
@@ -84,10 +85,11 @@ function Sidebar() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
 }
 
 export default Sidebar;
+
+

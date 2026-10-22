@@ -1,31 +1,42 @@
 import multer from "multer";
 import path from "path";
+import os from "os";
 
 const storage = multer.diskStorage({
-    filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname || "").toLowerCase();
-        const safeExt = [".jpeg", ".jpg", ".png", ".webp" ].includes(ext) ? ext : "";
-        const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-        cb(null, `${unique}${safeExt}`);
-    },
+  destination: (req, file, cb) => {
+    cb(null, os.tmpdir());
+  },
+
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname || "").toLowerCase();
+    const safeExt = [".jpeg", ".jpg", ".png", ".webp"].includes(ext)
+      ? ext
+      : "";
+
+    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+
+    cb(null, `${unique}${safeExt}`);
+  },
 });
 
-//filter file jpg, png, webp, jpeg
-
 const fileFilter = (req, file, cb) => {
-    const allowTypes = /jpeg|jpg|png|webp/ 
-    const extname = allowTypes.test(path.extname(file.originalname). toLocaleLowerCase())
-    const mimeTypes = allowTypes.test(file.mimetype)
+  const allowTypes = /jpeg|jpg|png|webp/;
+  const extname = allowTypes.test(
+    path.extname(file.originalname || "").toLowerCase()
+  );
+  const mimeTypes = allowTypes.test(file.mimetype);
 
-    if(extname && mimeTypes) {
-        cb(null, true)
-    }
-    else{
-        cb(new Error("Only image files are allowed (jpeg,jpg,png,webp)"))
-    }
+  if (extname && mimeTypes) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed (jpeg, jpg, png, webp)"));
+  }
 };
+
 export const upload = multer({
-    storage,
-    fileFilter,
-    limits: {fileSize: 5*1024*1024}, //5MB limit
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
 });

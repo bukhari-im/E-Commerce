@@ -2,12 +2,12 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: midnight-blue --default, soft-light;
+  themes: dark-blue --default , soft-light;
 }
 
 /* DARK MODE */
 @plugin "daisyui/theme" {
-  name: "midnight-blue";
+  name: "dark-blue";
   default: true;
   color-scheme: dark;
 
@@ -82,4 +82,4 @@
   --radius-selector: 0.75rem;
   --radius-field: 0.75rem;
   --radius-box: 1rem;
-}
+};

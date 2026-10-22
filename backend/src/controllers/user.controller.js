@@ -1,4 +1,65 @@
+import { getAuth, clerkClient } from "@clerk/express";
 import { User } from "../models/user.model.js";
+
+export async function syncUser(req, res) {
+  try {
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized - invalid Clerk session",
+      });
+    }
+
+    
+    const clerkUser = await clerkClient.users.getUser(userId);
+
+    const email = clerkUser.emailAddresses.find(
+      (item) => item.id === clerkUser.primaryEmailAddressId
+    )?.emailAddress;
+
+    if (!email) {
+      return res.status(400).json({
+        message: "Clerk account has no primary email",
+      });
+    }
+
+    const name =
+      [clerkUser.firstName, clerkUser.lastName]
+        .filter(Boolean)
+        .join(" ") || email;
+
+    const user = await User.findOneAndUpdate(
+      { clerkId: userId },
+      {
+        $set: {
+          email,
+          name,
+          imageUrl: clerkUser.imageUrl || "",
+        },
+        $setOnInsert: {
+          clerkId: userId,
+        },
+      },
+      {
+        returnDocument:"after",
+        upsert: true,
+        runValidators: true,
+      }
+    );
+
+    return res.status(200).json({
+      message: "User synchronized successfully",
+      user,
+    });
+  } catch (error) {
+    console.error("Error syncing Clerk user:", error);
+
+    return res.status(500).json({
+      message: "Failed to synchronize user",
+    });
+  }
+}
 
 
 export async function addAddress(req,res) {
@@ -86,7 +147,7 @@ export async function updateAddress(req,res) {
 
     await user.save();
 
-    res.status(200).json({ message:" Address updated successfully ", addresses: user.address});
+    res.status(200).json({ message:" Address updated successfully ", addresses: user.addresses});
     
         
     } catch (error) {
@@ -101,10 +162,10 @@ try {
     const {addressId} = req.params
     const user = req.user
 
-    user.address.pull(addressId)
+    user.addresses.pull(addressId)
 
     await user.save();
-    res.status(200).json({ message:" Address deleted successfully ", addresses: user.address});
+    res.status(200).json({ message:" Address deleted successfully ", addresses: user.addresses});
 
 } catch (error) {
     console.error("Error in delete Address controller", error);
@@ -158,7 +219,7 @@ export async function getWishlist(req,res) {
     try {
     // we're using populate, because wishList is just an array of product.Id
     
-        const user = await User.findById(req.user_id).populate("wishList")
+        const user = await User.findById(req.user._id).populate("wishList")
 
         res.status(200).json({wishList: user.wishList});
 

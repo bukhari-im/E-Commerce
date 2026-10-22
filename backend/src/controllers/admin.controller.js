@@ -20,17 +20,16 @@ export async function createProduct(req, res) {
             return res.status(400).json({ message:" Maximum 3 images allowed "});
         }
         
-        const uploadPromises = req.files.map(() => {
-            return cloudinary.uploader.upload(File.path, {
-                folder: " products "
-            });
+        const uploadPromises = req.files.map((file) => {
+        return cloudinary.uploader.upload(file.path, {
+         folder: "products",
+         });
         });
 
         const uploadResults = await Promise.all(uploadPromises);
 
-        //secure_url
-
-        const imageUrls = uploadResults.map((result) => result.seucre_url);
+        const imageUrls = uploadResults.map((result) => result.secure_url
+        );
 
         const product = await Product.create({
             name,
@@ -91,14 +90,17 @@ export async function updateProduct(req, res) {
               return res.status(400).json({ message :" Maximum 3 images allowed "});  
             }
 
-        const uploadPromises = req.files.map(() => {
-            return cloudinary.uploaded.upload(File.path, {
-                folder : "products",
+            const uploadPromises = req.files.map((file) => {
+                return cloudinary.uploader.upload(file.path, {
+                     folder: "products",
             });
-        });
+            });
 
-        const uploadResults = await Promise.all(uploadPromises);
-        product.images = uploadResults.map((result) => result.secure_url);
+            const uploadResults = await Promise.all(uploadPromises);
+
+            product.images = uploadResults.map(
+             (result) => result.secure_url
+            );
 
         }
 
@@ -147,11 +149,11 @@ export async function updateOrderStatus(req,res) {
 
         order.status = status
 
-        if (!status === "shipped" && !order.shippedAt) {
+        if (status === "shipped" && !order.shippedAt) {
             order.shippedAt = new Date();
         }
 
-         if (!status === "delivered" && !order.deliveredAt) {
+         if (status === "delivered" && !order.deliveredAt) {
             order.deliveredAt = new Date();
         }
 
@@ -190,7 +192,7 @@ export async function getDashboardStats(req,res) {
     const totalCustomers = await User.countDocuments();
     const totalProducts =  await Product.countDocuments();
 
-    req.status(200).json({
+    res.status(200).json({
         totalRevenue,
         totalOrders,
         totalCustomers,
@@ -201,5 +203,17 @@ export async function getDashboardStats(req,res) {
            console.error("Error fetching dashboard stats", error)
         res.status(500).json({ message:" Internal server error "});
         
+    }
+};
+
+export const deleteProduct = async (req,res) => {
+    try { 
+        const {id} = req.params;
+        await Product.findByIdAndDelete(id);
+        res.status(200).json({message:"Product deleted succesfully"});
+        
+    } catch (error) {
+        console.error("Error deleting product", error)
+        res.status(500).json({message:"Failed to delete product"});
     }
 };

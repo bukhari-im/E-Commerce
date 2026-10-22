@@ -19,7 +19,7 @@ export const capitalizeText = (text) => {
  export const getStockStatusBadge = (stock) => {
     if (stock === 0) return {text:"Out of stock", class:"badge-error"};
     if (stock < 20) return {text:"Low stock", class:"badge-warning"};
-    return {text:"In Stock", class:"badge-succes"};
+    return {text:"In Stock", class:"badge-info"};
 
  };
 

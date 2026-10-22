@@ -4,7 +4,7 @@ import { Sun, Moon } from "lucide-react";
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState(
-    () => localStorage.getItem("theme") || "midnight-blue"
+    () => localStorage.getItem("theme") || "dark-blue"
   );
 
   useEffect(() => {
@@ -14,10 +14,10 @@ export default function ThemeToggle() {
 
   const toggleTheme = () => {
     setTheme((current) =>
-      current === "midnight-blue"
+      current === "dark-blue"
         ? "soft-light"
-        : "midnight-blue"
-    );
+        : "dark-blue"
+    )
   };
 
   return (
@@ -28,7 +28,7 @@ export default function ThemeToggle() {
       aria-label="Change Theme"
       title="Change Theme"
     >
-      {theme === "midnight-blue" ? (
+      {theme === "dark-blue" ? (
         <Sun className="size-5 text-amber-400" />
       ) : (
         <Moon className="size-5 text-indigo-500" />
