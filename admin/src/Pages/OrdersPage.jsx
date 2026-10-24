@@ -16,6 +16,9 @@ function OrdersPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+    },
+    onError:(error) => {
+      console.error("Failed to update order status", error);
     }
   });
 
