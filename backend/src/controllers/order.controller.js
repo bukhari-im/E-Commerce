@@ -16,7 +16,7 @@ export async function createOrder(req,res) {
     // todo: check later in the video if this is actually working
 
     for (const item of orderItem) {
-        const product = await Product.findById(item.product_id);
+        const product = await Product.findById(item.product._id);
 
         if(!product) {
             return res.status(404).json({ error:`Product ${item.name} not found`});

@@ -265,8 +265,8 @@ const handleSumbit = (e) => {
 
       <input
         type="number"
-        step="0.1"
-        placeholder="0.8"
+        step="100"
+        placeholder="0"
         className="input input-bordered w-full border-2 border-base-content/40 focus:border-orange-500 focus:outline-none"
         value={formData.price}
         onChange={(e) =>
